@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .card {
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            width: 100%;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .card h1 {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+
+        .title {
+            color: grey;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .social-links {
+            margin: 15px 0;
+        }
+
+        .social-links a {
+            text-decoration: none;
+            font-size: 20px;
+            margin: 0 10px;
+            color: black;
+            transition: 0.3s;
+        }
+
+        .social-links a:hover {
+            opacity: 0.7;
+        }
+
+        button {
+            border: none;
+            outline: none;
+            padding: 10px;
+            color: white;
+            background-color: #000;
+            text-align: center;
+            cursor: pointer;
+            width: 90%;
+            font-size: 16px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            {% if request.user.userprofile.profile_picture %}
+                <img src="{{ request.user.userprofile.profile_picture.url }}" alt="Profile">
+            {% else %}
+                <img src="{% static 'default-profile.png' %}" alt="Profile">
+            {% endif %}
+            
+            <h1>{{ request.user.first_name }} {{ request.user.last_name }}</h1>
+            <p class="title">CEO & Founder</p>
+            <p>University of Dar es Salaam</p>
+
+            <div class="social-links">
+                {% if request.user.userprofile.twitter %}
+                <a href="{{ request.user.userprofile.twitter }}" target="_blank">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                {% endif %}
+                
+                {% if request.user.userprofile.linkedin %}
+                <a href="{{ request.user.userprofile.linkedin }}" target="_blank">
+                    <i class="fa fa-linkedin"></i>
+                </a>
+                {% endif %}
+                
+                {% if request.user.userprofile.facebook %}
+                <a href="{{ request.user.userprofile.facebook }}" target="_blank">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                {% endif %}
+                
+                <!-- Call (Direct Phone) -->
+                <a href="tel:{{ request.user.userprofile.phone_number }}">
+                    <i class="fa fa-phone"></i>
+                </a>
+
+                <!-- WhatsApp -->
+                <a href="https://wa.me/{{ request.user.userprofile.phone_number }}" target="_blank">
+                    <i class="fa fa-whatsapp"></i>
+                </a>
+
+                <!-- Email -->
+                <a href="mailto:{{ request.user.email }}" target="_blank">
+                    <i class="fa fa-envelope"></i>
+                </a>
+            </div>
+
+            <p><button>Contact</button></p>
+
+            {% block content %}
+            <h2>Your Profile</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Save Changes</button>
+            </form>
+
+            <h3>Profile Information</h3>
+            <p><strong>Email:</strong> {{ request.user.email }}</p>
+            <p><strong>Phone Number:</strong> {{ request.user.userprofile.phone_number }}</p>
+            {% endblock %}
+        </div>
+    </div>
+</body>
+
+</html>

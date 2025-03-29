@@ -1,0 +1,21 @@
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="item" placeholder="Enter item">
+    <button type="submit">Place Order</button>
+</form>
+
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="latitude" placeholder="Enter latitude">
+    <input type="text" name="longitude" placeholder="Enter longitude">
+    <button type="submit">Update Location</button>
+</form>
+
+{% if location %}
+    <p>Customer: {{ customer.username }}</p>
+    <p>Latitude: {{ location.latitude }}</p>
+    <p>Longitude: {{ location.longitude }}</p>
+    <div>{{ map_html|safe }}</div>
+{% else %}
+    <p>No location available</p>
+{% endif %}
